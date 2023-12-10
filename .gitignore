@@ -2,6 +2,9 @@
 /dist
 /node_modules
 package-lock.json
+.c
+.cpp
+.exe
 # Logs
 logs
 *.log
