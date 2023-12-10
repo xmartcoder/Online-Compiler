@@ -1,7 +1,7 @@
 const app = require('express')();
 const bodyParser = require('body-parser');
 const fs = require('fs');
-const run = require('./codeRunner');
+const { runc, runcpp } = require('./codeRunner')
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -10,17 +10,29 @@ app.set('trust proxy', true)
 app.post('/runc', async (req, res) => {
     try {
         let code = req.body.code;
-        fs.writeFileSync('program.c', code);
-        const result = await run('program');
+        fs.writeFileSync('c_program.c', code);
+        const result = await runc('c_program');
         res.send(result);
     } catch (error) {
-        res.send(error);
+        res.send(error.stderr);
     }
 })
 
+app.post('/runcpp', async (req, res) => {
+    try {
+        let code = req.body.code;
+        fs.writeFileSync('cpp_program.cpp', code);
+        const result = await runcpp('cpp_program');
+        res.send(result);
+    } catch (error) {
+        res.send(error.stderr);
+    }
+})
+
+
 app.get('/', (req, res) => {
-    console.log("SomeOne Intered Here => ", req.ip);
-    res.send('hii =>  '+req.ip);
+    console.log("New User => ", req.ip);
+    res.send('Hi, You Are Welcome..... =>  ' + req.ip);
 })
 
 app.listen(3000);
