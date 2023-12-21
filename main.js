@@ -1,4 +1,5 @@
 const app = require('express')();
+const cors = require('cors');
 const bodyParser = require('body-parser');
 const fs = require('fs');
 const { runc, runcpp } = require('./codeRunner')
@@ -6,6 +7,16 @@ const { runc, runcpp } = require('./codeRunner')
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set('trust proxy', true)
+
+
+app.use(cors({
+    "origin": "*",
+    "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+    "preflightContinue": false,
+    "optionsSuccessStatus": 204
+}))
+
+
 
 app.post('/runc', async (req, res) => {
     try {
